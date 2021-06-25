@@ -7,6 +7,7 @@ import * as Redux from 'redux';
 
 export interface IHttpClientOptions {
     disableCache?: true;
+    customHeaders?: {[key: string]: string}
 }
 
 /**
@@ -107,6 +108,11 @@ export abstract class HttpClient {
         if (options?.disableCache === true) {
             headers['pragma'] = 'no-cache';
             headers['cache-control'] = 'no-cache';
+        }
+        if (options?.customHeaders && Object.keys(options.customHeaders).length > 0) {
+            for (const headerKey of Object.keys(options.customHeaders)) {
+                headers[headerKey] = options.customHeaders[headerKey];
+            }
         }
         return headers;
     }
